@@ -17,7 +17,10 @@ router.post('/login', authController.login);
 router.post('/logout', authController.logout);
 
 router.get('/terima-kasih', (req,res) => {
-    res.render('terima-kasih')
+    res.render('terima-kasih', {layout: false})
+});
+router.get('/dashboard', (req,res) => {
+    res.render('admin/dashboard')
 });
 router.get('/live',  reportController.liveReport);
 

@@ -12,7 +12,7 @@ const index = async (req, res) => {
 
   const kandidat = await Kandidat.findAll()
 
-  res.render('index', { kandidat: kandidat });
+  res.render('index', { kandidat: kandidat,layout: false });
 }
 
 module.exports = {

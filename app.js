@@ -1,5 +1,6 @@
 // Dependencies
 const express = require('express');
+var expressLayouts = require('express-ejs-layouts');
 const session = require('express-session');
 const http = require('http');
 const path = require('path');
@@ -12,7 +13,6 @@ const app = express();
 const indexRouter = require('./routes/index');
 const server = http.createServer(app);
 const io = socket.init(server);
-
 
 // Set port
 const port = process.env.PORT || 3000;
@@ -29,10 +29,15 @@ app.use(session({
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+
 // Set view engine
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+// EJS Layouts
+app.use(expressLayouts);
+app.set("layout extractScripts", true)
+app.set('layout', 'layouts/admin-main');
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
 

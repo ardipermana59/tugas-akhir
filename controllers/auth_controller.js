@@ -7,19 +7,19 @@ const login = async (req, res) => {
   try {
     const user = await User.findOne({ where: { username } });
     if (!user) {
-      return res.render('auth/login', { message: 'Invalid username or password' });
+      return res.render('auth/login', { message: 'Invalid username or password', layout: false });
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      return res.render('auth/login', { message: 'Invalid username or password' });
+      return res.render('auth/login', { message: 'Invalid username or password', layout: false });
     }
 
     req.session.user = user;
 
     res.redirect('/');
   } catch (error) {
-    res.render('auth/login', { message: 'Internal server error' });
+    res.render('auth/login', { message: 'Internal server error', layout: false });
   }
 };
 
@@ -27,7 +27,7 @@ const loginView = async (req, res) => {
   const user = req.session.user;
 
   if (!user) {
-    return res.render('auth/login');
+    return res.render('auth/login', { layout: false });
   }
 
   return res.redirect('/');
@@ -39,7 +39,7 @@ const logout = (req, res) => {
       return res.status(500).send('Unable to log out');
     }
 
-    res.redirect('/login');
+    res.json({ message: 'Berhasil logout' });
   });
 };
 

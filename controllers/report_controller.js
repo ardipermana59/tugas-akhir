@@ -11,10 +11,10 @@ const liveReport = async (req, res) => {
         },
         include: [{
             model: Pemilih,
-            as: 'Pemilih' 
+            as: 'Pemilih'
         }]
     });
-    
+
     const formattedData = data.map(item => {
         return {
             ...item.get(),
@@ -23,7 +23,7 @@ const liveReport = async (req, res) => {
         };
     });
 
-    res.render('live-report', { data: formattedData });
+    res.render('live-report', { data: formattedData, layout: false });
 }
 
 module.exports = {
