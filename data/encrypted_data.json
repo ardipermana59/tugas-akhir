@@ -1,0 +1,18 @@
+[
+    {
+        "id": "a8fe60b6-4d36-487d-a4d1-b5447c0823ce",
+        "pemilih_id": null,
+        "data": null,
+        "hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "previous_hash": null,
+        "created_at": "2024-06-08T05:21:09.439Z"
+    },
+    {
+        "id": "a8fe60b6-4d36-487d-a4d1-b5447c0823ce",
+        "pemilih_id": "bba62a03-b577-4969-9583-61d4ebcc476c",
+        "data": "7e5267fb662af86d165bcbd6a080dfd96e43cfd20dd87008e3e70c410e170c17",
+        "hash": "e6478f5b3f1ff9ca99163823c24c41152342dc0cfbd29886a9b9d27230489632",
+        "previous_hash": "421b0c25da8d94c8ec342ffb3964e5a482570a71053ec704962cccf80779dbcc",
+        "created_at": "2024-06-08T05:21:09.439Z"
+    }
+]
