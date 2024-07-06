@@ -12,7 +12,8 @@ const liveReport = async (req, res) => {
         include: [{
             model: Pemilih,
             as: 'Pemilih'
-        }]
+        }],
+        limit: 50
     });
 
     const formattedData = data.map(item => {

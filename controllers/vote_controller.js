@@ -3,9 +3,10 @@ const moment = require('moment');
 const createSpeechRequest = require('../services/unrealspeech_service');
 
 const { Kandidat, Pemilih, Pilihan } = require('../models');
-const socket = require('../utils/SocketIo')
-const AES = require('../utils/AES');
-const SHA = require('../utils/SHA');
+const { Socket, formatDateTime } = require('../utils')
+const { AES } = require('../utils');
+const { SHA } = require('../utils');
+const { data } = require('jquery');
 
 const vote = async (req, res) => {
   const { kandidat } = req.body;
@@ -13,7 +14,6 @@ const vote = async (req, res) => {
   try {
     const user = req.session.user
     const idPemilih = await Pemilih.findOne({ where: { user_id: user.id } })
-    const key = process.SECRET_KEY
 
     const pemilih = await Pilihan.findOne({
       where: {
@@ -38,29 +38,55 @@ const vote = async (req, res) => {
     }
 
     // Get previous block
-    const previousData = await Pilihan.findOne({
-      order: [['created_at', 'DESC']]
+    const lastData = await Pilihan.findAll({
+      order: [['created_at', 'DESC']],
+      limit: 2
     });
 
-    const data = {
-      kandidat_id: kandidatExists.id,
+    if (!lastData) {
+      return res.status(503).json({
+        success: false,
+        message: 'Service belum siap'
+      });
     }
 
-    const encryptData = AES.encrypt(JSON.stringify(data), key)
+    const lastBlockData = lastData.map(data => {
+      const plainData = data.get({ plain: true });
+      plainData.created_at = formatDateTime(plainData.created_at);
+      return plainData;
+    });
+
+    // Verify Last Block
+    if (lastData.length > 1) {
+      const lastTwoBlock = lastBlockData[1]
+      const lastBlock = lastBlockData[0]
+
+      const verifyBlock = SHA.verifyHash(lastTwoBlock, lastBlock.previous_hash)
+
+      if (!verifyBlock) {
+        return res.status(403).json({
+          success: false,
+          message: 'Terjadi dugaan peretasan'
+        });
+      }
+    }
+
+    const encryptData = AES.encrypt({ kandidat_id: kandidatExists.id });
+    const hashedLastBlock = SHA.generateHash(lastBlockData[0]);
 
     const newBlock = {
-      id: uuidv4(),
       pemilih_id: idPemilih.id,
       data: encryptData,
-      previous_hash: previousData.hash,
+      hash: SHA.generateHash(uuidv4()),
+      previous_hash: hashedLastBlock,
       created_at: new Date(),
     };
 
-    const hashedBlock = SHA.generateHash(newBlock)
-    newBlock.hash = hashedBlock
+    const newHashedBlock = SHA.generateHash(newBlock)
+    newBlock.hash = newHashedBlock
 
     await Pilihan.create(newBlock)
-    const io = socket.getIo();
+    const io = Socket.getIo();
     const now = moment(new Date()).format('HH:mm');
     createSpeechRequest(`${idPemilih.name} have voted at ${now} WI`)
       .then(response => {
@@ -77,6 +103,7 @@ const vote = async (req, res) => {
 
     res.status(201).json({ success: true, message: 'Vote berhasil' });
   } catch (error) {
+    console.log(error)
     res.status(500).json({ error: 'Terjadi kesalahan pada server' });
   }
 };

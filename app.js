@@ -5,14 +5,14 @@ const session = require('express-session');
 const http = require('http');
 const path = require('path');
 const bodyParser = require('body-parser');
-const socket = require('./utils/SocketIo');
+const { Socket } = require('./utils');
 require('dotenv').config()
 
 // Initialize express app
 const app = express();
 const indexRouter = require('./routes/index');
 const server = http.createServer(app);
-const io = socket.init(server);
+const io = Socket.init(server);
 
 // Set port
 const port = process.env.PORT || 3000;
@@ -37,7 +37,18 @@ app.set('view engine', 'ejs');
 // EJS Layouts
 app.use(expressLayouts);
 app.set("layout extractScripts", true)
+app.set("layout extractStyles", true)
 app.set('layout', 'layouts/admin-main');
+app.use((req, res, next) => {
+  res.locals.title = 'Default Title';
+  res.locals.app_name = process.env.APP_NAME;
+  res.locals.version = process.env.APP_VERSION;
+  res.locals.activePage = req.path
+  next();
+});
+
+
+
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -46,10 +57,10 @@ app.use('/', indexRouter);
 
 
 // Socket.IO connection handling
-io.on('connection', (socket) => {
+io.on('connection', (Socket) => {
   console.log('A user connected');
 
-  socket.on('disconnect', () => {
+  Socket.on('disconnect', () => {
     console.log('User disconnected');
   });
 
