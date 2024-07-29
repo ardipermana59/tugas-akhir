@@ -39,7 +39,7 @@ const vote = async (req, res) => {
 
     // Get previous block
     const lastData = await Pilihan.findAll({
-      order: [['created_at', 'DESC']],
+      order: [['id', 'DESC']],
       limit: 2
     });
 

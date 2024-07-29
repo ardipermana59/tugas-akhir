@@ -1,10 +1,6 @@
 const { Op } = require('sequelize');
 
-const getPaginatedData = async (Model, searchQuery, searchField, start, length, order) => {
-    const whereCondition = searchQuery
-        ? { [searchField]: { [Op.like]: `%${searchQuery}%` } }
-        : {};
-
+const getPaginatedData = async (Model, whereCondition, start, length, order) => {
     const { count: recordsTotal } = await Model.findAndCountAll();
     const { count: recordsFiltered, rows: data } = await Model.findAndCountAll({
         where: whereCondition,
@@ -19,3 +15,4 @@ const getPaginatedData = async (Model, searchQuery, searchField, start, length, 
 module.exports = {
     getPaginatedData
 };
+

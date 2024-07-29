@@ -5,7 +5,7 @@ const adminMiddleware = (req, res, next) => {
     return next();
   }
 
-  return res.redirect('errors/403')
+  return res.redirect('/errors/403')
 };
 
 

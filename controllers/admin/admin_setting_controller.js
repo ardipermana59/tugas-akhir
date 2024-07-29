@@ -26,6 +26,11 @@ const verifyAllBlocks = async (req) => {
     });
 };
 
+const view = (req, res) => {
+    res.render('admin/user', { title: 'Pengaturan' });
+}
+
 module.exports = {
-    createGenesisBlock
+    createGenesisBlock,
+    view
 };

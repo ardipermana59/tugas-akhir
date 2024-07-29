@@ -17,6 +17,11 @@ const login = async (req, res) => {
 
     req.session.user = user;
 
+
+
+    if (user.role == 'admin') {
+      return res.redirect('/dashboard');
+    }
     res.redirect('/');
   } catch (error) {
     res.render('auth/login', { message: 'Internal server error', layout: false });

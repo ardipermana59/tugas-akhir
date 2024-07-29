@@ -1,12 +1,12 @@
 <!-- Info boxes -->
 <div class="row">
-  <div class="col-12 col-sm-6 col-md-3">
+  <div class="col-12 col-sm-6 col-md-6">
     <div class="info-box">
       <span class="info-box-icon bg-info elevation-1"><i class="fas fa-user"></i></span>
       <div class="info-box-content">
         <span class="info-box-text">Kandidat</span>
         <span class="info-box-number">
-          2
+          <%=jumlah_kandidat  %>
         </span>
       </div>
       <!-- /.info-box-content -->
@@ -14,12 +14,12 @@
     <!-- /.info-box -->
   </div>
   <!-- /.col -->
-  <div class="col-12 col-sm-6 col-md-3">
+  <div class="col-12 col-sm-6 col-md-6">
     <div class="info-box mb-3">
       <span class="info-box-icon bg-primary elevation-1"><i class="fas fa-vote-yea"></i></span>
       <div class="info-box-content">
         <span class="info-box-text">Pemilih</span>
-        <span class="info-box-number">41,410</span>
+        <span class="info-box-number"><%=jumlah_pemilih  %></span>
       </div>
       <!-- /.info-box-content -->
     </div>
@@ -29,31 +29,6 @@
 
   <!-- fix for small devices only -->
   <div class="clearfix hidden-md-up"></div>
-
-  <div class="col-12 col-sm-6 col-md-3">
-    <div class="info-box mb-3">
-      <span class="info-box-icon bg-success elevation-1"><i class="fas fa-chart-bar"></i></span>
-      <div class="info-box-content">
-        <span class="info-box-text">Jumlah Suara Masuk</span>
-        <span class="info-box-number">760</span>
-      </div>
-      <!-- /.info-box-content -->
-    </div>
-    <!-- /.info-box -->
-  </div>
-  <!-- /.col -->
-  <div class="col-12 col-sm-6 col-md-3">
-    <div class="info-box mb-3">
-      <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-chart-bar"></i></span>
-      <div class="info-box-content">
-        <span class="info-box-text">Jumlah Sisa Suara</span>
-        <span class="info-box-number">2,000</span>
-      </div>
-      <!-- /.info-box-content -->
-    </div>
-    <!-- /.info-box -->
-  </div>
-  <!-- /.col -->
 </div>
 <div class="row">
   <div class="col-md-4">
@@ -133,7 +108,7 @@
       <!-- /.card-header -->
       <div class="card-body p-0">
         <div class="table-responsive">
-          <table class="table m-0">
+          <table id="data" class="table m-0">
             <thead>
               <tr>
                 <th>Nama</th>
@@ -142,12 +117,12 @@
             </thead>
             <tbody>
 
-              <% for( let index=0; index < 7; index++ ) { %>
+              <% data.forEach(item=> { %>
                 <tr>
-                  <td>John Doe</td>
-                  <td>21:20:43 17-06-2024</td>
+                  <td><%= item.Pemilih.name %></td>
+                  <td><%= item.created_at %></td>
                 </tr>
-                <% } %>
+                <% }); %>
             </tbody>
           </table>
         </div>
@@ -162,31 +137,100 @@
 
 <!-- ChartJS -->
 <script src="plugins/chart.js/Chart.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
 <script>
-  var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
-  var pieData = {
-    labels: [
-      'Joko Widodo',
-      'Prabowo'
-    ],
-    datasets: [
-      {
-        data: [700, 500],
-        backgroundColor: ['#f56954', '#00a65a']
+  document.addEventListener('DOMContentLoaded', (event) => {
+    const socket = io();
+
+    socket.on('connect', () => {
+      console.log('Connected to server');
+    });
+
+    socket.on('message', (message) => {
+      const newRow = ` 
+                  <tr>
+                      <td>${message.name}</td>
+                      <td>${message.created_at}</td>
+                  </tr>
+              `;
+      $('#data tbody').prepend(newRow);
+
+      // Hapus data terakhir jika data pada table sudah lebih dari 11
+      const rowCount = $('#data tbody tr').length;
+      if (rowCount > 11) {
+        $('#data tbody tr:last').remove();
       }
-    ]
-  }
-  var pieOptions = {
-    legend: {
-      display: false
+    });
+
+    socket.on('disconnect', () => {
+      console.log('Disconnected from server');
+    });
+  });
+</script>
+<script>
+  $(document).ready(function() {
+    var pieChart;
+    var pieChartCanvas = $('#pieChart').get(0).getContext('2d');
+
+    function fetchData() {
+      $.ajax({
+        url: '/api/suara',
+        method: 'GET',
+        success: function(response) {
+          var labels = response.map(function(kandidat) {
+            return kandidat.name;
+          });
+          var data = response.map(function(kandidat) {
+            return kandidat.votes;
+          });
+          var backgroundColors = ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de']; // Tambahkan lebih banyak warna jika kandidat lebih dari 2
+
+          var pieData = {
+            labels: labels,
+            datasets: [
+              {
+                data: data,
+                backgroundColor: backgroundColors.slice(0, labels.length)
+              }
+            ]
+          };
+
+          var pieOptions = {
+            legend: {
+              display: false
+            }
+          };
+
+          if (pieChart) {
+            // Jika grafik sudah ada, perbarui data dan panggil update
+            pieChart.data = pieData;
+            pieChart.update();
+          } else {
+            // Jika grafik belum ada, buat instance baru
+            pieChart = new Chart(pieChartCanvas, {
+              type: 'doughnut',
+              data: pieData,
+              options: pieOptions
+            });
+          }
+
+          // Update chart legend and footer dynamically
+          var legendHtml = '';
+          var footerHtml = '';
+          response.forEach(function(kandidat, index) {
+            legendHtml += '<li><i class="far fa-circle" style="color:' + backgroundColors[index] + '"></i> ' + kandidat.name + '</li>';
+            footerHtml += '<div><a href="#" class="nav-link">' + kandidat.name + '<span class="float-right" style="color:' + backgroundColors[index] + '">' + Math.round((kandidat.votes / data.reduce((a, b) => a + b)) * 100) + '%</span></a></div>';
+          });
+          $('.chart-legend').html(legendHtml);
+          $('.card-footer').html(footerHtml);
+        },
+        error: function(error) {
+          console.error('Error fetching data:', error);
+        }
+      });
     }
-  }
-  // Create pie or douhnut chart
-  // You can switch between pie and douhnut using the method below.
-  // eslint-disable-next-line no-unused-vars
-  var pieChart = new Chart(pieChartCanvas, {
-    type: 'doughnut',
-    data: pieData,
-    options: pieOptions
-  })
+
+    fetchData();
+    setInterval(fetchData, 10000); // Refresh setiap 10 detik
+  });
 </script>

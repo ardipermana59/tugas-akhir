@@ -1,0 +1,97 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <%= title %>
+                </h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <table id="data" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Foto</th>
+                            <th>Name</th>
+                            <th style="width: 7%;">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        const dataTableConfig = {
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "/api/kandidat/data",
+                data: function (d) {
+                    d.name = d.search.value;
+                }
+            },
+            columns: [
+                {
+                    data: "foto",
+                    orderable: false,
+                    searchable: false,
+                    render: function (data, type, row) {
+                        return `
+                                <img style="display: block; margin: 0 auto; max-width: 80px;" src="/images/${data}" class="table-img" alt="${row.name}">
+                            `;
+                    }
+                }
+                ,
+                { data: "name" },
+                {
+                    data: null,
+                    orderable: false,
+                    searchable: false,
+                    render: function (data, type, row) {
+                        return `
+                                <button class="btn btn-warning btn-sm edit-btn" data-id="${row.id}">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm delete-btn" data-id="${row.id}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                `;
+                    }
+                }
+            ],
+            lengthMenu: [[5, 10, 15, 50, 100], [5, 10, 15, 50, 100]],
+            dom: `
+                    <"row mb-3"B>
+                    <"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>
+                    t
+                    <"row pt-2"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>
+                    r
+                `,
+            buttons: [
+                {
+                    text: '<i class="fas fa-user-plus"></i> Tambah Kandidat',
+                    className: 'btn btn-primary mr-2 rounded',
+                    action: function (e, dt, node, config) {
+                        $('#modalTambahAdmin').modal('show');
+                    }
+                },
+                {
+                    text: '<i class="fas fa-sync-alt"></i>',
+                    className: 'btn btn-secondary rounded',
+                    action: function (e, dt, node, config) {
+                        dt.ajax.reload(); 
+                    }
+                }
+            ],
+        };
+
+        const table = $("#data").DataTable(dataTableConfig);
+
+        $('.dt-buttons .btn-secondary').removeClass('btn-secondary').addClass('btn-primary');
+    });
+</script>

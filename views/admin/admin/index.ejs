@@ -1,0 +1,242 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <%= title %>
+                </h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <table id="data" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Role</th>
+                            <th>Username</th>
+                            <th style="width: 7%;">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </div>
+</div>
+<%- include('modal_tambah_admin') %>
+<%- include('modal_edit_admin') %>
+<script>
+    $(document).ready(function () {
+        const dataTableConfig = {
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "/api/admin/data",
+                data: function (d) {
+                    d.username = d.search.value;
+                }
+            },
+            columns: [
+                { data: "role" },
+                { data: "username" },
+                {
+                    data: null,
+                    orderable: false,
+                    searchable: false,
+                    render: function (data, type, row) {
+                        return `
+                                <button class="btn btn-warning btn-sm edit-btn" data-id="${row.id}">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm delete-btn" data-id="${row.id}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                `;
+                    }
+                }
+            ],
+            lengthMenu: [[5, 10, 15, 50, 100], [5, 10, 15, 50, 100]],
+            dom: `
+                    <"row mb-3"B>
+                    <"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>
+                    t
+                    <"row pt-2"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>
+                    r
+                `,
+            buttons: [
+                {
+                    text: '<i class="fas fa-user-plus"></i> Tambah Admin',
+                    className: 'btn btn-primary mr-2 rounded',
+                    action: function (e, dt, node, config) {
+                        $('#modalTambahAdmin').modal('show');
+                    }
+                },
+                {
+                    text: '<i class="fas fa-sync-alt"></i>',
+                    className: 'btn btn-secondary rounded',
+                    action: function (e, dt, node, config) {
+                        dt.ajax.reload(); 
+                    }
+                }
+            ],
+        };
+
+        const table = $("#data").DataTable(dataTableConfig);
+
+        $('.dt-buttons .btn-secondary').removeClass('btn-secondary').addClass('btn-primary');
+
+        $('#data').on('click', '.delete-btn', function () {
+            const userId = $(this).data('id');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: `/api/admin/delete/${userId}`,
+                        method: 'DELETE',
+                        success: function (response) {
+                            Swal.fire(
+                                'Deleted!',
+                                'User has been deleted.',
+                                'success'
+                            );
+                            table.ajax.reload();
+                        },
+                        error: function (xhr, status, error) {
+                            if (xhr.status === 404) {
+                                Swal.fire(
+                                    'Failed!',
+                                    'User not found',
+                                    'error'
+                                );
+                            } else {
+                                Swal.fire(
+                                    'Failed!',
+                                    'There was an error deleting the user.',
+                                    'error'
+                                );
+                            }
+                        }
+                    });
+                }
+            });
+        });
+
+        $('#formTambahAdmin').on('submit', function (e) {
+            e.preventDefault();
+
+            const formData = $(this).serialize();
+
+            Swal.fire({
+                title: 'Processing...',
+                text: 'Please wait',
+                icon: 'info',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            $.ajax({
+                url: '/api/admin/add',
+                method: 'POST',
+                data: formData,
+                success: function (response) {
+                    Swal.fire(
+                        'Success!',
+                        'Admin has been added.',
+                        'success'
+                    );
+                    $('#modalTambahAdmin').modal('hide');
+                    $('#formTambahAdmin')[0].reset();
+                    table.ajax.reload();
+                },
+                error: function (xhr, status, error) {
+                    if (xhr.status === 400) {
+                            Swal.fire(
+                                'Failed!',
+                                xhr.responseJSON.error || 'There was an error adding the admin.',
+                                'error'
+                            );
+                    } else {
+                        Swal.fire(
+                            'Failed!',
+                            'There was an error adding the admin.',
+                            'error'
+                        );
+                    }
+                }
+            });
+        });
+
+        $('#data').on('click', '.edit-btn', function () {
+            const userId = $(this).data('id');
+
+            $.ajax({
+                url: `/api/admin/${userId}`,
+                method: 'GET',
+                success: function (data) {
+                    $('#editAdminId').val(data.id);
+                    $('#editUsername').val(data.username);
+                    $('#editPassword').val('');
+                    $('#modalEditAdmin').modal('show');
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire(
+                        'Failed!',
+                        'There was an error fetching the admin data.',
+                        'error'
+                    );
+                }
+            });
+        });
+
+        $('#formEditAdmin').on('submit', function (e) {
+            e.preventDefault();
+
+            const userId = $('#editAdminId').val();
+            const formData = {
+                username: $('#editUsername').val(),
+                password: $('#editPassword').val()
+            };
+
+            Swal.fire({
+                title: 'Processing...',
+                text: 'Please wait',
+                icon: 'info',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            $.ajax({
+                url: `/api/admin/update/${userId}`,
+                method: 'PUT',
+                data: formData,
+                success: function (response) {
+                    Swal.fire(
+                        'Success!',
+                        'Admin has been updated.',
+                        'success'
+                    );
+                    $('#modalEditAdmin').modal('hide');
+                    table.ajax.reload();
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire(
+                        'Failed!',
+                        'There was an error updating the admin.',
+                        'error'
+                    );
+                }
+            });
+        });
+    });
+</script>

@@ -1,0 +1,239 @@
+<div class="row">
+  <div class="col-md-6">
+    <!-- general form elements -->
+    <div class="card card-primary">
+      <div class="card-header">
+        <h3 class="card-title">Add Block</h3>
+      </div>
+      <!-- /.card-header -->
+      <!-- form start -->
+      <form id="addBlock">
+        <div class="card-body">
+          <div class="form-group">
+            <label for="total">Total</label>
+            <input type="number" class="form-control" id="totalAddBlock" name="total" value="1"
+              placeholder="Enter total">
+          </div>
+        </div>
+        <!-- /.card-body -->
+
+        <div class="card-footer">
+          <button id="submit" type="submit" class="btn btn-primary">Add</button>
+        </div>
+      </form>
+    </div>
+    <!-- /.card -->
+  </div>
+  <div class="col-md-6">
+    <!-- general form elements -->
+    <div class="card card-primary">
+      <div class="card-header">
+        <h3 class="card-title">Read Block</h3>
+      </div>
+      <!-- /.card-header -->
+      <!-- form start -->
+      <form id="readBlock">
+        <div class="card-body">
+          <div class="form-group">
+            <label for="total">Total</label>
+            <input type="number" class="form-control" id="totalReadBlock" name="total" value="1"
+              placeholder="Enter total">
+          </div>
+        </div>
+        <!-- /.card-body -->
+
+        <div class="card-footer">
+          <button id="submit" type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+    </div>
+    <!-- /.card -->
+  </div>
+
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Pie Chart</h3>
+      </div>
+      <div class="card-body">
+        <canvas id="pieChart" height="200"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Line Chart</h3>
+      </div>
+      <div class="card-body">
+        <canvas id="lineChart" height="200"></canvas>
+        <div id="endTime" class="mt-3">
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/plugins/chart.js/Chart.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  $(document).ready(function () {
+    const pieChartCtx = $('#pieChart').get(0).getContext('2d');
+    const lineChartCtx = $('#lineChart').get(0).getContext('2d');
+
+    let pieChart;
+    let lineChart;
+
+    // Function to update pie chart
+    const updatePieChart = (data) => {
+      const labels = data.map(item => item.kandidat_name);
+      const votes = data.map(item => item.votes);
+      const backgroundColors = ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'];
+
+      const pieData = {
+        labels: labels,
+        datasets: [{
+          data: votes,
+          backgroundColor: backgroundColors.slice(0, labels.length)
+        }]
+      };
+
+      if (pieChart) {
+        pieChart.data = pieData;
+        pieChart.update();
+      } else {
+        pieChart = new Chart(pieChartCtx, {
+          type: 'doughnut',
+          data: pieData,
+          options: {
+            legend: {
+              display: true
+            }
+          }
+        });
+      }
+    };
+
+    // Function to update line chart
+    const updateLineChart = (message) => {
+      const labels = lineChart.data.labels;
+      const data = lineChart.data.datasets[0].data;
+
+      labels.push(new Date().toLocaleTimeString());
+      data.push(message.waktu);
+
+      if (labels.length > 10) {
+        labels.shift();
+        data.shift();
+      }
+
+      lineChart.update();
+
+      const endTimeElement = document.getElementById('endTime');
+      if (endTimeElement) {
+        endTimeElement.textContent = `Waktu yang dibutuhkan : ${message.waktu} ms`;
+      }
+
+    };
+
+    $('#readBlock').on('submit', function (event) {
+      event.preventDefault(); // Prevent the form from submitting via the browser
+      const submitButton = $('#submit');
+      submitButton.text('Loading...');
+      $.ajax({
+        url: '/api/admin/testing/read',
+        method: 'POST',
+        data: {
+          total: $('#totalReadBlock').val()
+        },
+        success: function (response) {
+          submitButton.text('Submit');
+          if (response.success) {
+            updatePieChart(response.data);
+          } else {
+            alert('Error: ' + response.message);
+          }
+        },
+        error: function (xhr, status, error) {
+          console.error('Error: ' + error);
+          alert('An error occurred');
+          submitButton.text('Submit');
+        },
+      });
+    });
+
+    $('#addBlock').on('submit', function (event) {
+      event.preventDefault(); // Prevent the form from submitting via the browser
+      const submitButton = $('#submit');
+      submitButton.text('Loading...');
+      $.ajax({
+        url: '/api/admin/testing/add-block',
+        method: 'POST',
+        data: {
+          total: $('#totalAddBlock').val()
+        },
+        success: function (response) {
+          submitButton.text('Submit');
+          console.log(response)
+        },
+        error: function (xhr, status, error) {
+          console.error('Error: ' + error);
+          alert('An error occurred');
+          submitButton.text('Submit');
+        },
+      });
+    });
+
+    const socket = io();
+    socket.on('connect', () => {
+      console.log('Connected to server');
+    });
+
+    socket.on('testing-read-block', (message) => {
+      updateLineChart(message);
+    });
+    socket.on('testing-add-block', (message) => {
+      updateLineChart(message);
+    });
+
+    socket.on('disconnect', () => {
+      console.log('Disconnected from server');
+    });
+
+    // Initialize line chart
+    lineChart = new Chart(lineChartCtx, {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [{
+          label: 'Processing Time',
+          backgroundColor: 'rgba(60,141,188,0.9)',
+          borderColor: 'rgba(60,141,188,0.8)',
+          data: [],
+          fill: false
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          x: {
+            type: 'time',
+            time: {
+              unit: 'second',
+              displayFormats: {
+                second: 'HH:mm:ss'
+              }
+            }
+          },
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  });
+</script>
