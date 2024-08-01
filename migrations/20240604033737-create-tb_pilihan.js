@@ -15,6 +15,8 @@ module.exports = {
           model: 'tb_pemilih',
           key: 'id',
         },
+        onDelete:"CASCADE",
+        onUpdate:"CASCADE",
         allowNull: true
       },
       data: {

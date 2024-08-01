@@ -1,0 +1,36 @@
+<div class="modal fade" id="modalEditData" tabindex="-1" role="dialog" aria-labelledby="modalEditDataLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalEditDataLabel">Edit Data</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formEditData">
+                    <input type="hidden" name="id">
+
+                    <div class="form-group">
+                        <label for="name">Nama</label>
+                        <input type="text" class="form-control" name="name" required autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">Jenis Kelamin</label>
+                        <select class="form-control" name="gender" required>
+                            <option value="" disabled selected>Pilih jenis kelamin</option>
+                            <option value="l">Laki-laki</option>
+                            <option value="p">Perempuan</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Alamat</label>
+                        <textarea class="form-control" name="address" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

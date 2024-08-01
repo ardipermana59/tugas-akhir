@@ -14,8 +14,9 @@ const adminDashboardController = require('../controllers/admin/admin_dashboard_c
 const adminKandidatController = require('../controllers/admin/admin_kandidat_controller');
 const adminPemilihController = require('../controllers/admin/admin_pemilih_controller');
 const adminSettingController = require('../controllers/admin/admin_setting_controller');
-const adminUserController = require('../controllers/admin/admin_controller');
-const adminTestingController = require('../controllers/admin/testing_controller');
+const adminUserController = require('../controllers/admin/admin_user_controller');
+const adminHasilController = require('../controllers/admin/admin_hasil_controller');
+const adminTestingController = require('../controllers/admin/admin_testing_controller');
 
 // Middlewares
 const { authMiddleware } = require('../middlewares/auth_middleware');
@@ -40,6 +41,7 @@ router.get('/admin', adminUserController.view);
 router.get('/admin/kandidat', adminKandidatController.view);
 router.get('/admin/pemilih', adminPemilihController.view);
 router.get('/admin/pengaturan', adminSettingController.view); 
+router.get('/admin/hasil', adminHasilController.view);  
 
 // Testing
 router.get('/admin/testing', adminTestingController.view); 

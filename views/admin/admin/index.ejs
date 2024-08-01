@@ -85,6 +85,7 @@
 
         $('.dt-buttons .btn-secondary').removeClass('btn-secondary').addClass('btn-primary');
 
+        // Delete Data
         $('#data').on('click', '.delete-btn', function () {
             const userId = $(this).data('id');
             Swal.fire({
@@ -128,6 +129,7 @@
             });
         });
 
+        // Add Data
         $('#formTambahAdmin').on('submit', function (e) {
             e.preventDefault();
 
@@ -175,6 +177,7 @@
             });
         });
 
+        // Find Data
         $('#data').on('click', '.edit-btn', function () {
             const userId = $(this).data('id');
 
@@ -197,6 +200,7 @@
             });
         });
 
+        // Update Data
         $('#formEditAdmin').on('submit', function (e) {
             e.preventDefault();
 
