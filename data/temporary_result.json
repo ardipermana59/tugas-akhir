@@ -1,7 +1,12 @@
 [
   {
-    "id": "13f1d955-9b06-4627-bd9a-3701ac5d142c",
+    "id": "863f2427-c62a-4aee-ad90-a03514a93b83",
     "name": "Joko Widodo",
-    "votes": 119723
+    "votes": 481
+  },
+  {
+    "id": "5f29d651-7c55-48c9-9a03-0be28e5a8743",
+    "name": "Prabowo Subianto",
+    "votes": 405
   }
 ]

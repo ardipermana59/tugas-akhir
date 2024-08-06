@@ -3835,7 +3835,7 @@ var Style = /*#__PURE__*/function () {
           'font-strikethrough': document.queryCommandState('strikethrough') ? 'strikethrough' : 'normal',
           'font-family': document.queryCommandValue('fontname') || styleInfo['font-family']
         });
-      } catch (e) {// eslint-disable-next-line
+      } catch (e) { 
       } // list-style-type to list-style(unordered, ordered)
 
 

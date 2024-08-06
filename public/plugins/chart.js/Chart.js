@@ -4508,7 +4508,7 @@ var element_point = core_element.extend({
 		var x = vm.x;
 		var y = vm.y;
 		var globalDefaults = core_defaults.global;
-		var defaultColor = globalDefaults.defaultColor; // eslint-disable-line no-shadow
+		var defaultColor = globalDefaults.defaultColor;  
 
 		if (vm.skip) {
 			return;

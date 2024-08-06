@@ -27,7 +27,7 @@
                 throw new Error('SearchPane requires DataTables 1.10 or newer');
             }
             // Check that Select is included
-            // eslint-disable-next-line no-extra-parens
+             
             if (!dataTable.select) {
                 throw new Error('SearchPane requires Select');
             }
@@ -157,7 +157,7 @@
                         // get the filter value from the map
                         filter = _this.s.rowData.filterMap.get(dataIndex);
                         if (filter instanceof $.fn.dataTable.Api) {
-                            // eslint-disable-next-line no-extra-parens
+                             
                             filter = filter.toArray();
                         }
                     }
@@ -878,7 +878,7 @@
             // Declare the datatable for the pane
             var errMode = $.fn.dataTable.ext.errMode;
             $.fn.dataTable.ext.errMode = 'none';
-            // eslint-disable-next-line no-extra-parens
+             
             var haveScroller = dataTable.Scroller;
             this.s.dtPane = this.dom.dtP.DataTable($.extend(true, {
                 columnDefs: [
@@ -992,7 +992,7 @@
             }
             this.dom.searchBox.attr('placeholder', headerText);
             // As the pane table is not in the document yet we must initialise select ourselves
-            // eslint-disable-next-line no-extra-parens
+             
             $.fn.dataTable.select.init(this.s.dtPane);
             $.fn.dataTable.ext.errMode = errMode;
             // If it is not a custom pane
@@ -1047,7 +1047,7 @@
                     }
                 }
             }
-            // eslint-disable-next-line no-extra-parens
+             
             dataTable.select.init(this.s.dtPane);
             // If there are custom options set or it is a custom pane then get them
             if (colOpts.options !== undefined ||
@@ -1461,7 +1461,7 @@
                 // otherwise if the two filter values are equal then return true
                 else if (filter === colSelect.filter ||
                     // Loose type checking incase number type in column comparing to a string
-                    // eslint-disable-next-line eqeqeq
+                     
                     !(typeof filter === 'string' && filter.length === 0) && filter == colSelect.filter ||
                     colSelect.filter === null && typeof filter === 'string' && filter === '') {
                     return true;
@@ -1744,7 +1744,7 @@
                 throw new Error('SearchPane requires DataTables 1.10 or newer');
             }
             // Check that Select is included
-            // eslint-disable-next-line no-extra-parens
+             
             if (!dataTable$1.select) {
                 throw new Error('SearchPane requires Select');
             }
@@ -2610,7 +2610,7 @@
                 this.dom.panes.append(pane.dom.container);
                 if (pane.s.dtPane !== undefined) {
                     $$1(pane.s.dtPane.table().node()).parent()[0].scrollTop = pane.s.scrollTop;
-                    // eslint-disable-next-line no-extra-parens
+                     
                     $$1.fn.dataTable.select.init(pane.s.dtPane);
                 }
             }
@@ -3057,22 +3057,22 @@
         }
         else {
             // Browser - assume jQuery has already been loaded
-            // eslint-disable-next-line no-extra-parens
+             
             factory(window.jQuery, window, document);
         }
     }(function ($, window, document) {
         setJQuery($);
         setJQuery$1($);
         var dataTable = $.fn.dataTable;
-        // eslint-disable-next-line no-extra-parens
+         
         $.fn.dataTable.SearchPanes = SearchPanes;
-        // eslint-disable-next-line no-extra-parens
+         
         $.fn.DataTable.SearchPanes = SearchPanes;
-        // eslint-disable-next-line no-extra-parens
+         
         $.fn.dataTable.SearchPane = SearchPane;
-        // eslint-disable-next-line no-extra-parens
+         
         $.fn.DataTable.SearchPane = SearchPane;
-        // eslint-disable-next-line no-extra-parens
+         
         var apiRegister = $.fn.dataTable.Api.register;
         apiRegister('searchPanes()', function () {
             return this;

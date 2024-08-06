@@ -1,125 +1,145 @@
-const { Op } = require('sequelize');
-const { v4: uuidv4 } = require('uuid');
+const { Op } = require('sequelize')
+const { v4: uuidv4 } = require('uuid')
+const path = require('path')
+const sharp = require('sharp')
+const fs = require('fs')
 
-const { Kandidat } = require('../../models');
-const { getPaginatedData } = require('../../utils');
+const { Kandidat } = require('../../models')
+const { getPaginatedData } = require('../../utils')
 
 const view = (req, res) => {
-  res.render('admin/kandidat', { title: 'Data Kandidat' });
+  const name = req.session.name
+  res.render('admin/kandidat', { title: 'Data Kandidat', name })
 }
 
 const getData = async (req, res) => {
   try {
-      const search = req.query.name || '';
-      const start = parseInt(req.query.start) || 0;
-      const length = parseInt(req.query.length) || 10;
+    const search = req.query.name || ''
+    const start = parseInt(req.query.start) || 0
+    const length = parseInt(req.query.length) || 10
 
-      const order = [];
-      if (req.query.order) {
-          req.query.order.forEach(o => {
-              order.push([req.query.columns[o.column].data, o.dir.toUpperCase()]);
-          });
+    const order = []
+    if (req.query.order) {
+      req.query.order.forEach(o => {
+        order.push([req.query.columns[o.column].data, o.dir.toUpperCase()])
+      })
+    }
+
+    const whereCondition = {
+      name: {
+        [Op.like]: `%${search}%`
       }
+    }
 
-      const whereCondition = {
-          name: {
-              [Op.like]: `%${search}%`
-          }
-      };
+    const { recordsTotal, recordsFiltered, data } = await getPaginatedData(
+      Kandidat, whereCondition, start, length, order
+    )
 
-      const { recordsTotal, recordsFiltered, data } = await getPaginatedData(
-        Kandidat, whereCondition, start, length, order
-      );
-
-      res.json({
-          draw: parseInt(req.query.draw),
-          recordsTotal: recordsTotal,
-          recordsFiltered: recordsFiltered,
-          data: data
-      });
+    res.json({
+      draw: parseInt(req.query.draw),
+      recordsTotal: recordsTotal,
+      recordsFiltered: recordsFiltered,
+      data: data
+    })
   } catch (error) {
-      console.log(error);
-      res.status(500).json({ error: 'Internal Server Error' });
+    console.log(error)
+    res.status(500).json({ error: 'Internal Server Error' })
   }
-};
+}
 
 const getDataById = async (req, res) => {
-  const id = req.params.id;
+  const id = req.params.id
 
   try {
-      const data = await Kandidat.findOne({
-          where: {
-              id
-          }
-      });
-
-      if (!data) {
-          return res.status(404).json({ error: 'Data not found' });
+    const data = await Kandidat.findOne({
+      where: {
+        id
       }
-      
-      res.status(200).json(data);
+    })
+
+    if (!data) {
+      return res.status(404).json({ error: 'Data not found' })
+    }
+
+    res.status(200).json(data)
   } catch (error) {
-      res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: 'Internal Server Error' })
   }
-};
+}
 
 const addData = async (req, res) => {
-  const { name } = req.body;
+  const { name } = req.body
+  const file = req.file
 
+  if (!file) {
+    return res.status(400).json({ error: 'No file uploaded' })
+  }
+
+  const originalPath = file.path
+  const resizedFileName = `resized-${Date.now()}${path.extname(file.originalname)}`
+  const resizedPath = path.join('public/images', resizedFileName)
+  
   try {
+    await sharp(originalPath)
+      .resize(786, 1086)
+      .toFile(resizedPath)
+
+    fs.unlinkSync(originalPath)
+
     await Kandidat.create({
       id: uuidv4(),
       name,
-      foto: 'prabowo.jpg'
-    });
+      foto: resizedFileName
+    })
 
-    res.status(201).json({ message: 'Admin has been added.' });
+    res.status(201).json({ message: 'Data has been added.' })
   } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error(error)
+    res.status(500).json({ error: 'Internal Server Error' })
   }
-};
+}
 
 const updateData = async (req, res) => {
-  const id = req.params.id;
-  const { name } = req.body;
+  const id = req.params.id
+  const { name } = req.body
 
   try {
-      const data = await Kandidat.findOne({
-          where: {
-              id: id,
-          }
-      });
-     
-      if (!data) {
-          return res.status(404).json({ error: 'Data not found' });
+    const data = await Kandidat.findOne({
+      where: {
+        id: id,
       }
+    })
 
-      data.name = name;
-      await data.save();
+    if (!data) {
+      return res.status(404).json({ error: 'Data not found' })
+    }
 
-      res.status(200).json({ message: 'Data has been updated.' });
+    data.name = name
+    await data.save()
+
+    res.status(200).json({ message: 'Data has been updated.' })
   } catch (error) {
-      res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: 'Internal Server Error' })
   }
-};
+}
 
 const destroy = async (req, res) => {
-  const id = req.params.id;
+  const id = req.params.id
 
   try {
     const deletedData = await Kandidat.destroy({
       where: {
         id: id
       }
-    });
+    })
 
     if (deletedData === 1) {
-      return res.status(200).json({ message: 'Data has been deleted.' });
+      return res.status(200).json({ message: 'Data has been deleted.' })
     } else {
-      return res.status(404).json({ error: 'Data not found.' });
+      return res.status(404).json({ error: 'Data not found.' })
     }
   } catch (error) {
-    return res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: 'Internal server error' })
   }
 }
 
@@ -130,4 +150,4 @@ module.exports = {
   addData,
   updateData,
   destroy,
-};
+}

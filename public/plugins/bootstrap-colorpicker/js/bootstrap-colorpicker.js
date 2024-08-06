@@ -4815,7 +4815,7 @@ function Color(obj, model) {
 	var i;
 	var channels;
 
-	if (obj == null) { // eslint-disable-line no-eq-null,eqeqeq
+	if (obj == null) {  
 		this.model = 'rgb';
 		this.color = [0, 0, 0];
 		this.valpha = 1;
@@ -4978,7 +4978,7 @@ Color.prototype = {
 	green: getset('rgb', 1, maxfn(255)),
 	blue: getset('rgb', 2, maxfn(255)),
 
-	hue: getset(['hsl', 'hsv', 'hsl', 'hwb', 'hcg'], 0, function (val) { return ((val % 360) + 360) % 360; }), // eslint-disable-line brace-style
+	hue: getset(['hsl', 'hsv', 'hsl', 'hwb', 'hcg'], 0, function (val) { return ((val % 360) + 360) % 360; }),  
 
 	saturationl: getset('hsl', 1, maxfn(100)),
 	lightness: getset('hsl', 2, maxfn(100)),

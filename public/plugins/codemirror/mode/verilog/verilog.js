@@ -544,7 +544,7 @@ CodeMirror.defineMode("verilog", function(config, parserConfig) {
   var tlvTrackStatements = false;
   var tlvIdentMatch = /^([~!@#\$%\^&\*-\+=\?\/\\\|'"<>]+)([\d\w_]*)/;  // Matches an identifier.
   // Note that ':' is excluded, because of it's use in [:].
-  var tlvFirstLevelIndentMatch = /^[! ]  /;
+  var tlvFirstLevelIndentMatch = /^[! ] {2}/;
   var tlvLineIndentationMatch = /^[! ] */;
   var tlvCommentMatch = /^\/[\/\*]/;
 
@@ -665,7 +665,7 @@ CodeMirror.defineMode("verilog", function(config, parserConfig) {
             // Region line.
             style += " " + tlvScopeStyle(state, 0, "scope-ident")
           } else if (((stream.pos / tlvIndentUnit) < state.tlvIndentationStyle.length) &&
-                     (match = stream.match(stream.sol() ? tlvFirstLevelIndentMatch : /^   /))) {
+                     (match = stream.match(stream.sol() ? tlvFirstLevelIndentMatch : /^ {3}/))) {
             // Indentation
             style = // make this style distinct from the previous one to prevent
                     // codemirror from combining spans

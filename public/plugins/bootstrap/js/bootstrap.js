@@ -92,7 +92,7 @@
       delegateType: TRANSITION_END,
       handle: function handle(event) {
         if ($__default["default"](event.target).is(this)) {
-          return event.handleObj.handler.apply(this, arguments); // eslint-disable-line prefer-rest-params
+          return event.handleObj.handler.apply(this, arguments);  
         }
 
         return undefined;
@@ -128,7 +128,7 @@
     TRANSITION_END: 'bsTransitionEnd',
     getUID: function getUID(prefix) {
       do {
-        // eslint-disable-next-line no-bitwise
+         
         prefix += ~~(Math.random() * MAX_UID); // "~~" acts like a faster Math.floor() here
       } while (document.getElementById(prefix));
 
@@ -1895,7 +1895,7 @@
       }
 
       return parent || element.parentNode;
-    } // eslint-disable-next-line complexity
+    }  
     ;
 
     Dropdown._dataApiKeydownHandler = function _dataApiKeydownHandler(event) {

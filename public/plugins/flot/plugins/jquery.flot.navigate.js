@@ -104,7 +104,7 @@ use the p2c helpers on the axes in Flot to help you convert between these).
 can set the default in the options.
 */
 
-/* eslint-enable */
+ 
 (function($) {
     'use strict';
 

@@ -6,9 +6,9 @@
 
     var $$2;
     var dataTable$2;
-    // eslint-disable-next-line no-extra-parens
+     
     var moment = window.moment;
-    // eslint-disable-next-line no-extra-parens
+     
     var luxon = window.luxon;
     /**
      * Sets the value of jQuery for use in the file
@@ -80,14 +80,14 @@
                     .addClass(this.classes.button)
                     .attr('title', this.s.dt.i18n('searchBuilder.deleteTitle', i18n.deleteTitle))
                     .attr('type', 'button'),
-                // eslint-disable-next-line no-useless-escape
+                 
                 left: $$2('<button/>')
                     .html(this.s.dt.i18n('searchBuilder.left', i18n.left))
                     .addClass(this.classes.left)
                     .addClass(this.classes.button)
                     .attr('title', this.s.dt.i18n('searchBuilder.leftTitle', i18n.leftTitle))
                     .attr('type', 'button'),
-                // eslint-disable-next-line no-useless-escape
+                 
                 right: $$2('<button/>')
                     .html(this.s.dt.i18n('searchBuilder.right', i18n.right))
                     .addClass(this.classes.right)
@@ -1462,7 +1462,7 @@
                     return value === comparison[0];
                 }
             },
-            // eslint-disable-next-line sort-keys
+             
             '!=': {
                 conditionName: function (dt, i18n) {
                     return dt.i18n('searchBuilder.conditions.date.not', i18n.conditions.date.not);
@@ -1516,7 +1516,7 @@
                     }
                 }
             },
-            // eslint-disable-next-line sort-keys
+             
             '!between': {
                 conditionName: function (dt, i18n) {
                     return dt.i18n('searchBuilder.conditions.date.notBetween', i18n.conditions.date.notBetween);
@@ -1549,7 +1549,7 @@
                     return value === null || value === undefined || value.length === 0;
                 }
             },
-            // eslint-disable-next-line sort-keys
+             
             '!null': {
                 conditionName: function (dt, i18n) {
                     return dt.i18n('searchBuilder.conditions.date.notEmpty', i18n.conditions.date.notEmpty);
@@ -1583,7 +1583,7 @@
                         moment(comparison[0], that.s.dateFormat).valueOf();
                 }
             },
-            // eslint-disable-next-line sort-keys
+             
             '!=': {
                 conditionName: function (dt, i18n) {
                     return dt.i18n('searchBuilder.conditions.date.not', i18n.conditions.date.not);
@@ -1637,7 +1637,7 @@
                     }
                 }
             },
-            // eslint-disable-next-line sort-keys
+             
             '!between': {
                 conditionName: function (dt, i18n) {
                     return dt.i18n('searchBuilder.conditions.date.notBetween', i18n.conditions.date.notBetween);
@@ -1672,7 +1672,7 @@
                     return value === null || value === undefined || value.length === 0;
                 }
             },
-            // eslint-disable-next-line sort-keys
+             
             '!null': {
                 conditionName: function (dt, i18n) {
                     return dt.i18n('searchBuilder.conditions.date.notEmpty', i18n.conditions.date.notEmpty);
@@ -1706,7 +1706,7 @@
                         === luxon.DateTime.fromFormat(comparison[0], that.s.dateFormat).ts;
                 }
             },
-            // eslint-disable-next-line sort-keys
+             
             '!=': {
                 conditionName: function (dt, i18n) {
                     return dt.i18n('searchBuilder.conditions.date.not', i18n.conditions.date.not);
@@ -1762,7 +1762,7 @@
                     }
                 }
             },
-            // eslint-disable-next-line sort-keys
+             
             '!between': {
                 conditionName: function (dt, i18n) {
                     return dt.i18n('searchBuilder.conditions.date.notBetween', i18n.conditions.date.notBetween);
@@ -1797,7 +1797,7 @@
                     return value === null || value === undefined || value.length === 0;
                 }
             },
-            // eslint-disable-next-line sort-keys
+             
             '!null': {
                 conditionName: function (dt, i18n) {
                     return dt.i18n('searchBuilder.conditions.date.notEmpty', i18n.conditions.date.notEmpty);
@@ -1830,7 +1830,7 @@
                     return +value === +comparison[0];
                 }
             },
-            // eslint-disable-next-line sort-keys
+             
             '!=': {
                 conditionName: function (dt, i18n) {
                     return dt.i18n('searchBuilder.conditions.number.not', i18n.conditions.number.not);
@@ -1875,7 +1875,7 @@
                     return +value >= +comparison[0];
                 }
             },
-            // eslint-disable-next-line sort-keys
+             
             '>': {
                 conditionName: function (dt, i18n) {
                     return dt.i18n('searchBuilder.conditions.number.gt', i18n.conditions.number.gt);
@@ -1903,7 +1903,7 @@
                     }
                 }
             },
-            // eslint-disable-next-line sort-keys
+             
             '!between': {
                 conditionName: function (dt, i18n) {
                     return dt.i18n('searchBuilder.conditions.number.notBetween', i18n.conditions.number.notBetween);
@@ -1935,7 +1935,7 @@
                     return value === null || value === undefined || value.length === 0;
                 }
             },
-            // eslint-disable-next-line sort-keys
+             
             '!null': {
                 conditionName: function (dt, i18n) {
                     return dt.i18n('searchBuilder.conditions.number.notEmpty', i18n.conditions.number.notEmpty);
@@ -1974,7 +1974,7 @@
                     return +val === +comp;
                 }
             },
-            // eslint-disable-next-line sort-keys
+             
             '!=': {
                 conditionName: function (dt, i18n) {
                     return dt.i18n('searchBuilder.conditions.number.not', i18n.conditions.number.not);
@@ -2043,7 +2043,7 @@
                     return +val >= +comp;
                 }
             },
-            // eslint-disable-next-line sort-keys
+             
             '>': {
                 conditionName: function (dt, i18n) {
                     return dt.i18n('searchBuilder.conditions.number.gt', i18n.conditions.number.gt);
@@ -2086,7 +2086,7 @@
                     }
                 }
             },
-            // eslint-disable-next-line sort-keys
+             
             '!between': {
                 conditionName: function (dt, i18n) {
                     return dt.i18n('searchBuilder.conditions.number.notBetween', i18n.conditions.number.notBetween);
@@ -2127,7 +2127,7 @@
                     return value === null || value === undefined || value.length === 0;
                 }
             },
-            // eslint-disable-next-line sort-keys
+             
             '!null': {
                 conditionName: function (dt, i18n) {
                     return dt.i18n('searchBuilder.conditions.number.notEmpty', i18n.conditions.number.notEmpty);
@@ -2160,7 +2160,7 @@
                     return value === comparison[0];
                 }
             },
-            // eslint-disable-next-line sort-keys
+             
             '!=': {
                 conditionName: function (dt, i18n) {
                     return dt.i18n('searchBuilder.conditions.string.not', i18n.conditions.string.not);
@@ -2183,7 +2183,7 @@
                     return value.toLowerCase().indexOf(comparison[0].toLowerCase()) === 0;
                 }
             },
-            // eslint-disable-next-line sort-keys
+             
             '!starts': {
                 conditionName: function (dt, i18n) {
                     return dt.i18n('searchBuilder.conditions.string.notStartsWith', i18n.conditions.string.notStartsWith);
@@ -2195,7 +2195,7 @@
                     return value.toLowerCase().indexOf(comparison[0].toLowerCase()) !== 0;
                 }
             },
-            // eslint-disable-next-line sort-keys
+             
             'contains': {
                 conditionName: function (dt, i18n) {
                     return dt.i18n('searchBuilder.conditions.string.contains', i18n.conditions.string.contains);
@@ -2207,7 +2207,7 @@
                     return value.toLowerCase().includes(comparison[0].toLowerCase());
                 }
             },
-            // eslint-disable-next-line sort-keys
+             
             '!contains': {
                 conditionName: function (dt, i18n) {
                     return dt.i18n('searchBuilder.conditions.string.notContains', i18n.conditions.string.notContains);
@@ -2230,7 +2230,7 @@
                     return value.toLowerCase().endsWith(comparison[0].toLowerCase());
                 }
             },
-            // eslint-disable-next-line sort-keys
+             
             '!ends': {
                 conditionName: function (dt, i18n) {
                     return dt.i18n('searchBuilder.conditions.string.notEndsWith', i18n.conditions.string.notEndsWith);
@@ -2257,7 +2257,7 @@
                     return value === null || value === undefined || value.length === 0;
                 }
             },
-            // eslint-disable-next-line sort-keys
+             
             '!null': {
                 conditionName: function (dt, i18n) {
                     return dt.i18n('searchBuilder.conditions.string.notEmpty', i18n.conditions.string.notEmpty);
@@ -2300,7 +2300,7 @@
                     return value.indexOf(comparison[0]) === -1;
                 }
             },
-            // eslint-disable-next-line sort-keys
+             
             '=': {
                 conditionName: function (dt, i18n) {
                     return dt.i18n('searchBuilder.conditions.array.equals', i18n.conditions.array.equals);
@@ -2320,7 +2320,7 @@
                     return false;
                 }
             },
-            // eslint-disable-next-line sort-keys
+             
             '!=': {
                 conditionName: function (dt, i18n) {
                     return dt.i18n('searchBuilder.conditions.array.not', i18n.conditions.array.not);
@@ -2355,7 +2355,7 @@
                     return value === null || value === undefined || value.length === 0;
                 }
             },
-            // eslint-disable-next-line sort-keys
+             
             '!null': {
                 conditionName: function (dt, i18n) {
                     return dt.i18n('searchBuilder.conditions.array.notEmpty', i18n.conditions.array.notEmpty);
@@ -3299,7 +3299,7 @@
                 }, 1);
             });
             // Check that DateTime is included, If not need to check if it could be used
-            // eslint-disable-next-line no-extra-parens
+             
             if (!dataTable.DateTime) {
                 var types = this.s.dt.columns().type().toArray();
                 if (types === undefined || types.includes(undefined) || types.includes(null)) {
@@ -3597,7 +3597,7 @@
                         notBetween: 'Not Between',
                         notEmpty: 'Not Empty'
                     },
-                    // eslint-disable-next-line id-blacklist
+                     
                     number: {
                         between: 'Between',
                         empty: 'Empty',
@@ -3610,7 +3610,7 @@
                         notBetween: 'Not Between',
                         notEmpty: 'Not Empty'
                     },
-                    // eslint-disable-next-line id-blacklist
+                     
                     string: {
                         contains: 'Contains',
                         empty: 'Empty',
@@ -3678,7 +3678,7 @@
         }
         else {
             // Browser - assume jQuery has already been loaded
-            // eslint-disable-next-line no-extra-parens
+             
             factory(window.jQuery, window, document);
         }
     }(function ($, window, document) {
@@ -3686,19 +3686,19 @@
         setJQuery$1($);
         setJQuery$2($);
         var dataTable = $.fn.dataTable;
-        // eslint-disable-next-line no-extra-parens
+         
         $.fn.dataTable.SearchBuilder = SearchBuilder;
-        // eslint-disable-next-line no-extra-parens
+         
         $.fn.DataTable.SearchBuilder = SearchBuilder;
-        // eslint-disable-next-line no-extra-parens
+         
         $.fn.dataTable.Group = Group;
-        // eslint-disable-next-line no-extra-parens
+         
         $.fn.DataTable.Group = Group;
-        // eslint-disable-next-line no-extra-parens
+         
         $.fn.dataTable.Criteria = Criteria;
-        // eslint-disable-next-line no-extra-parens
+         
         $.fn.DataTable.Criteria = Criteria;
-        // eslint-disable-next-line no-extra-parens
+         
         var apiRegister = $.fn.dataTable.Api.register;
         // Set up object for plugins
         $.fn.dataTable.ext.searchBuilder = {

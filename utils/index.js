@@ -1,8 +1,8 @@
-const AES = require('./AES');
-const SHA = require('./SHA');
-const Socket = require('./SocketIo');
-const { formatDateTime } = require('./formatDateTime');
-const { getPaginatedData } = require('./getPaginatedData');
+const AES = require('./AES')
+const SHA = require('./SHA')
+const Socket = require('./SocketIo')
+const { formatDateTime } = require('./formatDateTime')
+const { getPaginatedData } = require('./getPaginatedData')
 
 module.exports = {
   AES,
@@ -10,4 +10,4 @@ module.exports = {
   Socket,
   formatDateTime,
   getPaginatedData
-};
+}

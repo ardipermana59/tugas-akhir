@@ -1,17 +1,16 @@
-'use strict';
-const { v4: uuidv4 } = require('uuid');
-const bcrypt = require('bcrypt');
-const { faker } = require('@faker-js/faker/locale/id_ID');
-const SHA = require('../utils/SHA');
-const AES = require('../utils/AES');
-const { formatDateTime } = require('../utils/formatDateTime');
+'use strict'
+const { faker } = require('@faker-js/faker/locale/id_ID')
+const { v4: uuidv4 } = require('uuid')
+const bcrypt = require('bcrypt')
+
+const { formatDateTime } = require('../utils/formatDateTime')
+const SHA = require('../utils/SHA')
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    const NUM_OF_VOTERS = 20;
+  async up(queryInterface) {
+    const NUM_OF_VOTERS = 20
     
-    // Helper function to create a user
     const createUser = async (role, username, password) => {
       return {
         id: uuidv4(),
@@ -20,10 +19,9 @@ module.exports = {
         password: await bcrypt.hash(password, 10),
         created_at: new Date(),
         updated_at: new Date()
-      };
-    };
+      }
+    }
 
-    // Helper function to create voter details
     const createVoterDetails = (userId) => {
       return {
         id: uuidv4(),
@@ -33,20 +31,20 @@ module.exports = {
         address: faker.location.streetAddress(true),
         created_at: new Date(),
         updated_at: new Date()
-      };
-    };
+      }
+    }
 
     // Create admin user
-    const adminUser = await createUser('admin', 'admin', 'password');
+    const adminUser = await createUser('admin', 'admin', 'password')
 
     // Create voter users
-    const voterUsers = [];
+    const voterUsers = []
     for (let i = 1; i <= NUM_OF_VOTERS; i++) {
-      voterUsers.push(await createUser('pemilih', `pemilih${i}`, 'password'));
+      voterUsers.push(await createUser('pemilih', `pemilih${i}`, 'password'))
     }
 
     // Create voter details
-    const voterDetails = voterUsers.map(user => createVoterDetails(user.id));
+    const voterDetails = voterUsers.map(user => createVoterDetails(user.id))
 
     // Create admin details
     const adminDetails = [{
@@ -55,7 +53,7 @@ module.exports = {
       name: 'admin',
       created_at: new Date(),
       updated_at: new Date()
-    }];
+    }]
 
     // Create candidates
     const candidates = [
@@ -73,16 +71,16 @@ module.exports = {
         created_at: new Date(),
         updated_at: new Date()
       }
-    ];
+    ]
 
     // Insert data into the database
-    await queryInterface.bulkInsert('tb_user', [adminUser, ...voterUsers], {});
-    await queryInterface.bulkInsert('tb_pemilih', voterDetails, {});
-    await queryInterface.bulkInsert('tb_admin', adminDetails, {});
-    await queryInterface.bulkInsert('tb_kandidat', candidates, {});
+    await queryInterface.bulkInsert('tb_user', [adminUser, ...voterUsers], {})
+    await queryInterface.bulkInsert('tb_pemilih', voterDetails, {})
+    await queryInterface.bulkInsert('tb_admin', adminDetails, {})
+    await queryInterface.bulkInsert('tb_kandidat', candidates, {})
 
     // Create genesis block for voting data
-    let blockId = 1;
+    let blockId = 1
     const genesisBlock = {
       id: blockId,
       pemilih_id: null,
@@ -90,18 +88,18 @@ module.exports = {
       previous_hash: null,
       hash: SHA.generateHash(uuidv4()),
       created_at: formatDateTime(new Date())
-    };
+    }
    
-    const votingData = [genesisBlock];
+    const votingData = [genesisBlock]
     
-    await queryInterface.bulkInsert('tb_pilihan', votingData, {});
+    await queryInterface.bulkInsert('tb_pilihan', votingData, {})
   },
 
-  async down(queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('tb_user', null, {});
-    await queryInterface.bulkDelete('tb_pemilih', null, {});
-    await queryInterface.bulkDelete('tb_admin', null, {});
-    await queryInterface.bulkDelete('tb_kandidat', null, {});
-    await queryInterface.bulkDelete('tb_pilihan', null, {});
+  async down(queryInterface) {
+    await queryInterface.bulkDelete('tb_user', null, {})
+    await queryInterface.bulkDelete('tb_pemilih', null, {})
+    await queryInterface.bulkDelete('tb_admin', null, {})
+    await queryInterface.bulkDelete('tb_kandidat', null, {})
+    await queryInterface.bulkDelete('tb_pilihan', null, {})
   }
-};
+}

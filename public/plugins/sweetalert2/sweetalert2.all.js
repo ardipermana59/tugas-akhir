@@ -1980,7 +1980,7 @@
     let popup = getPopup();
 
     if (!popup) {
-      new Swal(); // eslint-disable-line no-new
+      new Swal();  
     }
 
     popup = getPopup();

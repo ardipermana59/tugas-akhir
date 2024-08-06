@@ -18,7 +18,7 @@
         <!-- /.card-body -->
 
         <div class="card-footer">
-          <button id="submit" type="submit" class="btn btn-primary">Add</button>
+          <button type="submit" class="btn btn-primary">Add</button>
         </div>
       </form>
     </div>
@@ -43,7 +43,7 @@
         <!-- /.card-body -->
 
         <div class="card-footer">
-          <button id="submit" type="submit" class="btn btn-primary">Submit</button>
+          <button type="submit" class="btn btn-primary">Read</button>
         </div>
       </form>
     </div>
@@ -69,7 +69,11 @@
       </div>
       <div class="card-body">
         <canvas id="lineChart" height="200"></canvas>
-        <div id="endTime" class="mt-3">
+        <div class="mt-3 list-unstyled">
+          <ul>
+            <li id="iteration"></li>
+            <li id="endTime"></li>
+          </ul>
         </div>
 
       </div>
@@ -124,7 +128,7 @@
       const data = lineChart.data.datasets[0].data;
 
       labels.push(new Date().toLocaleTimeString());
-      data.push(message.waktu);
+      data.push(message.time);
 
       if (labels.length > 10) {
         labels.shift();
@@ -134,15 +138,17 @@
       lineChart.update();
 
       const endTimeElement = document.getElementById('endTime');
+      const iteration = document.getElementById('iteration');
       if (endTimeElement) {
-        endTimeElement.textContent = `Waktu yang dibutuhkan : ${message.waktu} ms`;
+        endTimeElement.textContent = `Waktu yang dibutuhkan : ${message.time} ms`;
+        iteration.textContent = `Data : ${message.iteration} blok`;
       }
 
     };
 
     $('#readBlock').on('submit', function (event) {
       event.preventDefault(); // Prevent the form from submitting via the browser
-      const submitButton = $('#submit');
+      const submitButton = $('#readBlock button[type="submit"]');
       submitButton.text('Loading...');
       $.ajax({
         url: '/api/admin/testing/read',
@@ -168,7 +174,7 @@
 
     $('#addBlock').on('submit', function (event) {
       event.preventDefault(); // Prevent the form from submitting via the browser
-      const submitButton = $('#submit');
+      const submitButton = $('#addBlock button[type="submit"]');
       submitButton.text('Loading...');
       $.ajax({
         url: '/api/admin/testing/add-block',

@@ -242,7 +242,7 @@ for (NAME in TypedArrayConstructorsList) {
 
 // WebKit bug - typed arrays constructors prototype is Object.prototype
 if (!NATIVE_ARRAY_BUFFER_VIEWS || typeof TypedArray != 'function' || TypedArray === Function.prototype) {
-  // eslint-disable-next-line no-shadow -- safe
+   
   TypedArray = function TypedArray() {
     throw TypeError('Incorrect invocation');
   };
@@ -469,7 +469,7 @@ if (!NATIVE_ARRAY_BUFFER) {
     }
   });
 } else {
-  /* eslint-disable no-new -- required for testing */
+   
   if (!fails(function () {
     NativeArrayBuffer(1);
   }) || !fails(function () {
@@ -480,7 +480,7 @@ if (!NATIVE_ARRAY_BUFFER) {
     new NativeArrayBuffer(NaN);
     return NativeArrayBuffer.name != ARRAY_BUFFER;
   })) {
-  /* eslint-enable no-new -- required for testing */
+   
     $ArrayBuffer = function ArrayBuffer(length) {
       anInstance(this, $ArrayBuffer);
       return new NativeArrayBuffer(toIndex(length));
@@ -670,10 +670,10 @@ var createMethod = function (IS_INCLUDES) {
     var index = toAbsoluteIndex(fromIndex, length);
     var value;
     // Array#includes uses SameValueZero equality algorithm
-    // eslint-disable-next-line no-self-compare -- NaN check
+     
     if (IS_INCLUDES && el != el) while (length > index) {
       value = O[index++];
-      // eslint-disable-next-line no-self-compare -- NaN check
+       
       if (value != value) return true;
     // Array#indexOf ignores holes, Array#includes - not
     } else for (;length > index; index++) {
@@ -842,7 +842,7 @@ var fails = __webpack_require__(7293);
 module.exports = function (METHOD_NAME, argument) {
   var method = [][METHOD_NAME];
   return !!method && fails(function () {
-    // eslint-disable-next-line no-useless-call,no-throw-literal -- required for testing
+     
     method.call(null, argument || function () { throw 1; }, 1);
   });
 };
@@ -965,7 +965,7 @@ try {
   iteratorWithReturn[ITERATOR] = function () {
     return this;
   };
-  // eslint-disable-next-line no-throw-literal -- required for testing
+   
   Array.from(iteratorWithReturn, function () { throw 2; });
 } catch (error) { /* empty */ }
 
@@ -1720,7 +1720,7 @@ module.exports =
   check(typeof window == 'object' && window) ||
   check(typeof self == 'object' && self) ||
   check(typeof __webpack_require__.g == 'object' && __webpack_require__.g) ||
-  // eslint-disable-next-line no-new-func -- fallback
+   
   (function () { return this; })() || Function('return this')();
 
 
@@ -1793,9 +1793,9 @@ var pack = function (number, mantissaLength, bytes) {
   var index = 0;
   var exponent, mantissa, c;
   number = abs(number);
-  // eslint-disable-next-line no-self-compare -- NaN check
+   
   if (number != number || number === Infinity) {
-    // eslint-disable-next-line no-self-compare -- NaN check
+     
     mantissa = number != number ? 1 : 0;
     exponent = eMax;
   } else {
@@ -2572,7 +2572,7 @@ exports.f = NASHORN_BUG ? function propertyIsEnumerable(V) {
 /***/ 7674:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
-/* eslint-disable no-proto -- safe */
+ 
 var anObject = __webpack_require__(9670);
 var aPossiblePrototype = __webpack_require__(6077);
 
@@ -3140,7 +3140,7 @@ var adapt = function (delta, numPoints, firstTime) {
  * Converts a string of Unicode symbols (e.g. a domain name label) to a
  * Punycode string of ASCII-only symbols.
  */
-// eslint-disable-next-line max-statements -- TODO
+ 
 var encode = function (input) {
   var output = [];
 
@@ -3692,7 +3692,7 @@ if (DESCRIPTORS) {
 /***/ 3832:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
-/* eslint-disable no-new -- required for testing */
+ 
 var global = __webpack_require__(7854);
 var fails = __webpack_require__(7293);
 var checkCorrectnessOfIteration = __webpack_require__(7072);
@@ -5785,7 +5785,7 @@ var parseIPv4 = function (input) {
   return ipv4;
 };
 
-// eslint-disable-next-line max-statements -- TODO
+ 
 var parseIPv6 = function (input) {
   var address = [0, 0, 0, 0, 0, 0, 0, 0];
   var pieceIndex = 0;
@@ -6007,7 +6007,7 @@ var CANNOT_BE_A_BASE_URL_PATH = {};
 var QUERY = {};
 var FRAGMENT = {};
 
-// eslint-disable-next-line max-statements -- TODO
+ 
 var parseURL = function (url, input, stateOverride, base) {
   var state = stateOverride || SCHEME_START;
   var pointer = 0;

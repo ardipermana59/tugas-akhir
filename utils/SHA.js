@@ -1,4 +1,4 @@
-const CryptoJS = require('crypto-js');
+const CryptoJS = require('crypto-js')
 
 /**
  * Generates a SHA-256 hash of the given data.
@@ -7,10 +7,10 @@ const CryptoJS = require('crypto-js');
  */
 const generateHash = (data) => {
     // Compute the SHA-256 hash of the input data
-    const hash = CryptoJS.SHA256(JSON.stringify(data));
+    const hash = CryptoJS.SHA256(JSON.stringify(data))
 
     // Convert the hash to a hexadecimal string
-    return hash.toString(CryptoJS.enc.Hex);
+    return hash.toString(CryptoJS.enc.Hex)
 }
 
 /**
@@ -21,13 +21,13 @@ const generateHash = (data) => {
  */
 const verifyHash = (data, hashToVerify) => {
     // Generate hash of the input data
-    const generatedHash = generateHash(data);
+    const generatedHash = generateHash(data)
 
     // Compare generated hash with the provided hash to verify
-    return generatedHash === hashToVerify;
+    return generatedHash === hashToVerify
 }
 
 module.exports = {
     generateHash,
     verifyHash
-};
+}
