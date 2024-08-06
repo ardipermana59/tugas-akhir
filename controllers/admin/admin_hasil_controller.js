@@ -66,7 +66,6 @@ const generateHasil = async (req, res) => {
             message: 'Terjadi kesalahan pada server'
         })
     }
-    res.render('admin/hasil', { title: 'Hasil' })
 }
 
 module.exports = {

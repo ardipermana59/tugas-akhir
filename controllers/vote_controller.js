@@ -87,7 +87,7 @@ const vote = async (req, res) => {
     await Pilihan.create(newBlock)
     const io = Socket.getIo()
     const now = moment(new Date()).format('HH:mm')
-    createSpeechRequest(`${idPemilih.name} have voted at ${now} WI`)
+    createSpeechRequest(`${idPemilih.name} have voted at ${now}`) 
       .then(response => {
         io.emit('message', {
           message: `${idPemilih.name} has voted at ${now}`,

@@ -1,12 +1,17 @@
 [
   {
-    "id": "863f2427-c62a-4aee-ad90-a03514a93b83",
-    "name": "Joko Widodo",
-    "votes": 481
+    "id": "37696fab-93ab-47c8-a30d-588faf91af71",
+    "name": "Prabowo Subianto",
+    "votes": 2
   },
   {
-    "id": "5f29d651-7c55-48c9-9a03-0be28e5a8743",
-    "name": "Prabowo Subianto",
-    "votes": 405
+    "id": "8405dceb-d681-42d2-89ea-b1da53eb65df",
+    "name": "Joko Widodo",
+    "votes": 5
+  },
+  {
+    "id": "b5ddb716-d21b-4ac5-9854-70dfbc4ab7fa",
+    "name": "Ardi Permana",
+    "votes": 2
   }
 ]
